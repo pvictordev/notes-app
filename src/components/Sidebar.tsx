@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import notesIcon from "../assets/notes-icon.png";
 
 interface Note {
   id: string;
@@ -40,7 +41,7 @@ export default function Sidebar({
             }`}
             onClick={() => setCurNoteId(note.id)}
           >
-            <img src="" alt="" />
+            <img style={{width:"20px", height:"20px"}} src={notesIcon} alt="" />
             <h4 className="text-snippet">{note.body.split("\n")[0]} </h4>
             <button
               className="delete-btn"
