@@ -1,27 +1,34 @@
-# React + TypeScript + Vite
+<p align="center">
+  <img width="200" height="200" src="./src/assets/notes-app.png">
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Notes App - Markdown Notes App
 
-Currently, two official plugins are available:
+Notes App is a streamlined note-taking platform. It boasts an intuitive interface, modern design, and effortless navigation, ensuring a straightforward note-creation process that prioritizes content organization and accessibility
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Live Demo**: [Notes App](https://pvictordev.netlify.app/)
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+The Notes App is built using the following technologies:
 
-- Configure the top-level `parserOptions` property like this:
+- **React**
+- **TypeScript**
+- **Tailwind**
+- **Firebase**
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+## Features
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Markdown Notes App offers the following features:
+
+1. **Rich Text Editor**: Users can create and edit notes using a markdown-supported rich text editor, allowing for easy formatting and organization of content.
+
+2. **Sync Across Devices**: Seamless synchronization across multiple devices enables users to access their notes from anywhere, ensuring continuity and accessibility.
+
+3. **Tagging and Categorization**: Organize notes efficiently by adding tags or placing them into different categories, simplifying search and retrieval.
+
+4. **Customizable Themes**: Personalize the app's interface with various themes and color schemes, catering to different user preferences for aesthetics.
+
+5. **Search and Filter**: Robust search capabilities let users quickly find specific content within their notes, complemented by filtering options for enhanced navigation.
+
+6. **Markdown Preview**: Instant preview of markdown syntax allows users to visualize how their notes will appear while writing, facilitating a smooth editing experience.
