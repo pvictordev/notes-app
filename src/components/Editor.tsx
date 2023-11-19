@@ -1,15 +1,40 @@
+import React, { useState, useEffect } from "react";
 import Showdown from "showdown";
 import ReactMde from "react-mde";
-import { useState } from "react";
 
-export default function ({ currentNote, updateNote }) {
-  const [selectedTab, setSelectedTab] = useState("write");
-  const converter = new Showdown.Converter({
-    tables: true,
-    simplifiedAutoLink: true,
-    strikethrough: true,
-    tasklists: true,
-  });
+interface Note {
+  id: string;
+  body: string;
+}
+
+interface Props {
+  currentNote: Note;
+  updateNote: (value: string) => void;
+}
+
+export default function Editor({
+  currentNote,
+  updateNote,
+}: Props): JSX.Element {
+  const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
+  const [converter, setConverter] = useState<Showdown.Converter | null>(null);
+
+  useEffect(() => {
+    const converterInstance = new Showdown.Converter({
+      tables: true,
+      simplifiedAutoLink: true,
+      strikethrough: true,
+      tasklists: true,
+    });
+    setConverter(converterInstance);
+  }, []);
+
+  const generateMarkdownPreview = async (markdown: string) => {
+    if (converter) {
+      return converter.makeHtml(markdown);
+    }
+    return "";
+  };
 
   return (
     <section className="pane editor">
@@ -18,9 +43,7 @@ export default function ({ currentNote, updateNote }) {
         onChange={updateNote}
         selectedTab={selectedTab}
         onTabChange={setSelectedTab}
-        generateMarkdownPreview={(markdown) =>
-          Promise.resolve(converter.makeHtml(markdown))
-        }
+        generateMarkdownPreview={generateMarkdownPreview}
         minEditorHeight={80}
         heightUnits="vh"
       />

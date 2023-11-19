@@ -1,52 +1,49 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Editor from "./components/Editor";
 import Sidebar from "./components/Sidebar";
 import Split from "react-split";
 import { nanoid } from "nanoid";
-//react mde  style
+
+// React MDE style
 import "react-mde/lib/styles/css/react-mde-all.css";
 
-export default function App() {
-  //lazy state initialization (retrieve notes from local storage)
-  const [notes, setNotes] = useState(
+interface Note {
+  id: string;
+  body: string;
+}
+
+export default function App(): JSX.Element {
+  const [notes, setNotes] = useState<Note[]>(
     () => JSON.parse(localStorage.getItem("notes")) || []
   );
 
-  // check if notes[0] exists Before getting notes[0].id
-  const [curNoteId, setCurNoteId] = useState((notes[0] && notes[0].id) || "");
-
-  //Store note in window local storage
+  const [curNoteId, setCurNoteId] = useState<string>(
+    (notes[0] && notes[0].id) || ""
+  );
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
 
-  // Move  updated/modified note to the top
-  const updateNote = (text) => {
+  const updateNote = (text: string) => {
     setNotes((oldNotes) => {
-      let updatedArr = [];
-      for (let i = 0; i < oldNotes.length; i++) {
-        let oldNote = oldNotes[i];
-        if (oldNote.id === curNoteId) {
-          updatedArr.unshift({ ...oldNote, body: text });
-        } else {
-          updatedArr.push(oldNote);
-        }
-      }
+      const updatedArr = oldNotes.map((oldNote) =>
+        oldNote.id === curNoteId ? { ...oldNote, body: text } : oldNote
+      );
       return updatedArr;
     });
   };
 
-  //Delete note
-  function deleteNote(event, noteId) {
-    // prevents the propagation of an event to its parent elements
+  const deleteNote = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    noteId: string
+  ) => {
     event.stopPropagation();
-    setNotes((notes) => notes.filter((note) => note.id !== noteId));
-  }
+    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+  };
 
-  // Create a new note
   const createNewNote = () => {
-    const newNote = {
+    const newNote: Note = {
       id: nanoid(),
       body: "# Type your markdown note title here",
     };
@@ -54,14 +51,12 @@ export default function App() {
     setCurNoteId(newNote.id);
   };
 
-  //find curremt note
-  function findCurrentNote() {
+  const findCurrentNote = (): Note => {
     return (
-      notes.find((note) => {
-        return note.id === curNoteId;
-      }) || notes[0]
+      notes.find((note) => note.id === curNoteId) ||
+      notes[0] || { id: "", body: "" }
     );
-  }
+  };
 
   return (
     <main>

@@ -1,14 +1,26 @@
-import { useState } from "react";
-import { useMemo } from "react";
+import React, { useState, useMemo } from "react";
 
-export default function ({
+interface Note {
+  id: string;
+  body: string;
+}
+
+interface Props {
+  newNote: () => void;
+  notes: Note[];
+  currentNote: Note;
+  setCurNoteId: (id: string) => void;
+  deleteNote: (event: React.MouseEvent<HTMLButtonElement>, id: string) => void;
+}
+
+export default function Sidebar({
   newNote,
   notes,
   currentNote,
   setCurNoteId,
   deleteNote,
-}) {
-  const [numberOfItemShown, setNumberOfItemShown] = useState(7);
+}: Props): JSX.Element {
+  const [numberOfItemShown, setNumberOfItemShown] = useState<number>(7);
 
   const showMore = () => {
     if (numberOfItemShown <= notes.length) {
@@ -18,27 +30,28 @@ export default function ({
     }
   };
 
-  const noteElements = useMemo(() =>
-    notes.slice(0, numberOfItemShown).map((note, index) => (
-      <div key={note.id}>
-        <div
-          className={`title ${
-            note.id === currentNote.id ? "selected-note" : ""
-          }`}
-          onClick={() => setCurNoteId(note.id)}
-        >
-          <img src="" />
-          <h4 className="text-snippet">{note.body.split("\n")[0]} </h4>
-
-          <button
-            className="delete-btn"
-            onClick={(event) => deleteNote(event, note.id)}
+  const noteElements = useMemo(
+    () =>
+      notes.slice(0, numberOfItemShown).map((note, index) => (
+        <div key={note.id}>
+          <div
+            className={`title ${
+              note.id === currentNote.id ? "selected-note" : ""
+            }`}
+            onClick={() => setCurNoteId(note.id)}
           >
-            <i className="gg-trash trash-icon"></i>
-          </button>
+            <img src="" alt="" />
+            <h4 className="text-snippet">{note.body.split("\n")[0]} </h4>
+            <button
+              className="delete-btn"
+              onClick={(event) => deleteNote(event, note.id)}
+            >
+              <i className="gg-trash trash-icon"></i>
+            </button>
+          </div>
         </div>
-      </div>
-    ))
+      )),
+    [currentNote.id, deleteNote, notes, numberOfItemShown, setCurNoteId]
   );
 
   return (
