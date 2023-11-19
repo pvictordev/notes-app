@@ -1,35 +1,69 @@
-import React, { useState } from "react";
-import "./App.css";
+import React, { useState, useEffect } from "react";
+import Sidebar from "./components/Sidebar";
+import Editor from "./components/Editor";
+import { data } from "./data";
+import Split from "react-split";
+import { nanoid } from "nanoid";
 
-interface Note {
-  id: number;
-  title: string;
-  content: string;
-}
+export default function App() {
+  const [notes, setNotes] = React.useState(JSON.parse("notes") || []);
+  const [currentNoteId, setCurrentNoteId] = React.useState(
+    (notes[0] && notes[0].id) || ""
+  );
 
-const App: React.FC = () => {
-  const [notes, setNotes] = useState<Note[]>([]);
-
-  const addNote = () => {
-    const newNote: Note = {
-      id: notes.length + 1,
-      title: "New Note",
-      content: "Write your content here",
+  function createNewNote() {
+    const newNote = {
+      id: nanoid(),
+      body: "# Type your markdown note's title here",
     };
-    setNotes([...notes, newNote]);
-  };
+    setNotes((prevNotes) => [newNote, ...prevNotes]);
+    setCurrentNoteId(newNote.id);
+  }
+
+  function updateNote(text) {
+    setNotes((oldNotes) =>
+      oldNotes.map((oldNote) => {
+        return oldNote.id === currentNoteId
+          ? { ...oldNote, body: text }
+          : oldNote;
+      })
+    );
+  }
+
+  function findCurrentNote() {
+    return (
+      notes.find((note) => {
+        return note.id === currentNoteId;
+      }) || notes[0]
+    );
+  }
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   return (
-    <div className="app">
-      <button onClick={addNote}>Add Note</button>
-      {notes.map((note) => (
-        <div key={note.id}>
-          <h3>{note.title}</h3>
-          <p>{note.content}</p>
+    <main>
+      {notes.length > 0 ? (
+        <Split sizes={[30, 70]} direction="horizontal" className="split">
+          <Sidebar
+            notes={notes}
+            currentNote={findCurrentNote()}
+            setCurrentNoteId={setCurrentNoteId}
+            newNote={createNewNote}
+          />
+          {currentNoteId && notes.length > 0 && (
+            <Editor currentNote={findCurrentNote()} updateNote={updateNote} />
+          )}
+        </Split>
+      ) : (
+        <div className="no-notes">
+          <h1>You have no notes</h1>
+          <button className="first-note" onClick={createNewNote}>
+            Create one now
+          </button>
         </div>
-      ))}
-    </div>
+      )}
+    </main>
   );
-};
-
-export default App;
+}
