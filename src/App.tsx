@@ -13,8 +13,11 @@ interface Note {
 }
 
 export default function App(): JSX.Element {
-  const [notes, setNotes] = useState<Note[]>(
-    () => JSON.parse(localStorage.getItem("notes")) || []
+  // const [notes, setNotes] = useState<Note[]>(
+  //   () => JSON.parse(localStorage.getItem("notes")) || []
+  // );
+  const [notes, setNotes] = useState<Note[]>(() =>
+    JSON.parse(localStorage.getItem("notes") || "[]")
   );
 
   const [curNoteId, setCurNoteId] = useState<string>(
