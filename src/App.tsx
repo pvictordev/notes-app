@@ -47,7 +47,13 @@ export default function App(): JSX.Element {
       id: nanoid(),
       body: "# Type your markdown note title here",
     };
-    setNotes((prevNotes) => [newNote, ...prevNotes]);
+    setNotes((prevNotes) => {
+      if (!Array.isArray(prevNotes)) {
+        console.error("Notes is not an array:", prevNotes);
+        return [newNote];
+      }
+      return [newNote, ...prevNotes];
+    });
     setCurNoteId(newNote.id);
   };
 
