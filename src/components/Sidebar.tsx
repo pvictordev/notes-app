@@ -33,7 +33,7 @@ export default function Sidebar({
 
   const noteElements = useMemo(
     () =>
-      notes.slice(0, numberOfItemShown).map((note, index) => (
+      notes.slice(0, numberOfItemShown).map((note) => (
         <div key={note.id}>
           <div
             className={`title ${
