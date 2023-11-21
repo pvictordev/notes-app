@@ -17,11 +17,11 @@ export default function App(): JSX.Element {
     JSON.parse(localStorage.getItem("notes") || "[]")
   );
 
-  const [curNoteId, setCurNoteId] = useState<string>(
-    (notes[0] && notes[0].id) || ""
-  );
-
-  const currentNote = notes.find((note) => note.id === curNoteId) || notes[0];
+  //is still working but replaced with the optional chaining operator bellow
+  // const [curNoteId, setCurNoteId] = useState<string>(
+  //   (notes[0] && notes[0].id) || ""
+  // );
+  const [curNoteId, setCurNoteId] = useState<string>(notes[0]?.id || "");
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
@@ -93,12 +93,14 @@ export default function App(): JSX.Element {
     setCurNoteId(newNote.id);
   };
 
+  //replaced for performance with the line bellow
   // const findCurrentNote = (): Note => {
   //   return (
   //     notes.find((note) => note.id === curNoteId) ||
   //     notes[0] || { id: "", body: "" }
   //   );
   // };
+  const currentNote = notes.find((note) => note.id === curNoteId) || notes[0];
 
   return (
     <main>

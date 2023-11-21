@@ -12,8 +12,7 @@ Notes App is a streamlined note-taking platform. It boasts an intuitive interfac
 
 The Notes App is built using the following technologies:
 
-- **React**
-- **TypeScript**
+- **React + TypeScript**
 - **Tailwind**
 - **Firebase**
 
