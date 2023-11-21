@@ -3,7 +3,7 @@ import Editor from "./components/Editor";
 import Sidebar from "./components/Sidebar";
 import Split from "react-split";
 import { nanoid } from "nanoid";
-import { addDoc, onSnapshot, doc, deleteDoc } from "firebase/firestore";
+import { addDoc, onSnapshot, doc, deleteDoc, setDoc } from "firebase/firestore";
 import { notesCollection, db } from "./firebase";
 
 // React MDE style
@@ -27,7 +27,6 @@ export default function App(): JSX.Element {
   // );
   // const [curNoteId, setCurNoteId] = useState<string | undefined>(notes[0]?.id);
   const [curNoteId, setCurNoteId] = useState<string>("");
-  console.log(curNoteId)
 
   //removed because i will no longer save data on localStorage
   // useEffect(() => {
@@ -52,47 +51,52 @@ export default function App(): JSX.Element {
     }
   }, [notes]);
 
-  const updateNote = (text: string) => {
-    //doest not put updated note at the top of the list
-    // setNotes((oldNotes) => {
-    //   const updatedArr = oldNotes.map((oldNote) =>
-    //     oldNote.id === curNoteId ? { ...oldNote, body: text } : oldNote
-    //   );
-    //   return updatedArr;
-    // });
+  //refactored for firebase
+  // const updateNote = (text: string) => {
+  //   //doest not put updated note at the top of the list
+  //   // setNotes((oldNotes) => {
+  //   //   const updatedArr = oldNotes.map((oldNote) =>
+  //   //     oldNote.id === curNoteId ? { ...oldNote, body: text } : oldNote
+  //   //   );
+  //   //   return updatedArr;
+  //   // });
 
-    //puts updated note at the top of the list
-    // setNotes((oldNotes) => {
-    //   const newArray = [];
-    //   for (let i = 0; i < oldNotes.length; i++) {
-    //     const oldNote = oldNotes[i];
-    //     if (oldNote.id === curNoteId) {
-    //       newArray.unshift({ ...oldNote, body: text });
-    //     } else {
-    //       newArray.push(oldNote);
-    //     }
-    //   }
-    //   return newArray;
-    // });
+  //   //puts updated note at the top of the list
+  //   // setNotes((oldNotes) => {
+  //   //   const newArray = [];
+  //   //   for (let i = 0; i < oldNotes.length; i++) {
+  //   //     const oldNote = oldNotes[i];
+  //   //     if (oldNote.id === curNoteId) {
+  //   //       newArray.unshift({ ...oldNote, body: text });
+  //   //     } else {
+  //   //       newArray.push(oldNote);
+  //   //     }
+  //   //   }
+  //   //   return newArray;
+  //   // });
 
-    // puts updated note at the top of the list (modified)
-    setNotes((oldNotes) => {
-      const updatedNoteIndex = oldNotes.findIndex(
-        (note) => note.id === curNoteId
-      );
-      if (updatedNoteIndex === -1) {
-        return oldNotes;
-      }
+  //   // puts updated note at the top of the list (modified)
+  //   setNotes((oldNotes) => {
+  //     const updatedNoteIndex = oldNotes.findIndex(
+  //       (note) => note.id === curNoteId
+  //     );
+  //     if (updatedNoteIndex === -1) {
+  //       return oldNotes;
+  //     }
 
-      const updatedNote = { ...oldNotes[updatedNoteIndex], body: text };
-      const updatedNotes = [
-        updatedNote,
-        ...oldNotes.slice(0, updatedNoteIndex),
-        ...oldNotes.slice(updatedNoteIndex + 1),
-      ];
+  //     const updatedNote = { ...oldNotes[updatedNoteIndex], body: text };
+  //     const updatedNotes = [
+  //       updatedNote,
+  //       ...oldNotes.slice(0, updatedNoteIndex),
+  //       ...oldNotes.slice(updatedNoteIndex + 1),
+  //     ];
 
-      return updatedNotes;
-    });
+  //     return updatedNotes;
+  //   });
+  // };
+  const updateNote = async (text: string) => {
+    const docRef = doc(db, "notes", curNoteId);
+    await setDoc(docRef, { body: text, updateAt: Date.now() }, { merge: true });
   };
 
   //refactored for firebase
@@ -127,6 +131,8 @@ export default function App(): JSX.Element {
   async function createNewNote() {
     const newNote: Note = {
       body: "# Type your markdown note title here",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
     const newNoteRef = await addDoc(notesCollection, newNote);
 
