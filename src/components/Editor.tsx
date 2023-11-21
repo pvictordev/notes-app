@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Showdown from "showdown";
 import ReactMde from "react-mde";
 

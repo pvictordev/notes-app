@@ -21,6 +21,8 @@ export default function App(): JSX.Element {
     (notes[0] && notes[0].id) || ""
   );
 
+  const currentNote = notes.find((note) => note.id === curNoteId) || notes[0];
+
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
@@ -34,6 +36,21 @@ export default function App(): JSX.Element {
     //   return updatedArr;
     // });
 
+    //puts updated note at the top of the list
+    // setNotes((oldNotes) => {
+    //   const newArray = [];
+    //   for (let i = 0; i < oldNotes.length; i++) {
+    //     const oldNote = oldNotes[i];
+    //     if (oldNote.id === curNoteId) {
+    //       newArray.unshift({ ...oldNote, body: text });
+    //     } else {
+    //       newArray.push(oldNote);
+    //     }
+    //   }
+    //   return newArray;
+    // });
+
+    // puts updated note at the top of the list (modified)
     setNotes((oldNotes) => {
       const updatedNoteIndex = oldNotes.findIndex(
         (note) => note.id === curNoteId
@@ -76,12 +93,12 @@ export default function App(): JSX.Element {
     setCurNoteId(newNote.id);
   };
 
-  const findCurrentNote = (): Note => {
-    return (
-      notes.find((note) => note.id === curNoteId) ||
-      notes[0] || { id: "", body: "" }
-    );
-  };
+  // const findCurrentNote = (): Note => {
+  //   return (
+  //     notes.find((note) => note.id === curNoteId) ||
+  //     notes[0] || { id: "", body: "" }
+  //   );
+  // };
 
   return (
     <main>
@@ -89,14 +106,14 @@ export default function App(): JSX.Element {
         <Split sizes={[25, 75]} direction="horizontal" className="split">
           <Sidebar
             newNote={createNewNote}
-            currentNote={findCurrentNote()}
+            currentNote={currentNote}
             setCurNoteId={setCurNoteId}
             notes={notes}
             deleteNote={deleteNote}
           />
 
           {curNoteId && notes.length > 0 && (
-            <Editor currentNote={findCurrentNote()} updateNote={updateNote} />
+            <Editor currentNote={currentNote} updateNote={updateNote} />
           )}
         </Split>
       ) : (
