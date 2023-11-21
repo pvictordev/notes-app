@@ -26,11 +26,30 @@ export default function App(): JSX.Element {
   }, [notes]);
 
   const updateNote = (text: string) => {
+    //doest not put updated note at the top of the list
+    // setNotes((oldNotes) => {
+    //   const updatedArr = oldNotes.map((oldNote) =>
+    //     oldNote.id === curNoteId ? { ...oldNote, body: text } : oldNote
+    //   );
+    //   return updatedArr;
+    // });
+
     setNotes((oldNotes) => {
-      const updatedArr = oldNotes.map((oldNote) =>
-        oldNote.id === curNoteId ? { ...oldNote, body: text } : oldNote
+      const updatedNoteIndex = oldNotes.findIndex(
+        (note) => note.id === curNoteId
       );
-      return updatedArr;
+      if (updatedNoteIndex === -1) {
+        return oldNotes;
+      }
+
+      const updatedNote = { ...oldNotes[updatedNoteIndex], body: text };
+      const updatedNotes = [
+        updatedNote,
+        ...oldNotes.slice(0, updatedNoteIndex),
+        ...oldNotes.slice(updatedNoteIndex + 1),
+      ];
+
+      return updatedNotes;
     });
   };
 
