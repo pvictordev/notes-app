@@ -3,6 +3,8 @@ import Editor from "./components/Editor";
 import Sidebar from "./components/Sidebar";
 import Split from "react-split";
 import { nanoid } from "nanoid";
+import { addDoc, onSnapshot } from "firebase/firestore";
+import { notesCollection } from "./firebase";
 
 // React MDE style
 import "react-mde/lib/styles/css/react-mde-all.css";
@@ -13,19 +15,36 @@ interface Note {
 }
 
 export default function App(): JSX.Element {
-  const [notes, setNotes] = useState<Note[]>(() =>
-    JSON.parse(localStorage.getItem("notes") || "[]")
-  );
+  //removed because i will no longer save data on localStorage
+  // const [notes, setNotes] = useState<Note[]>(() =>
+  //   JSON.parse(localStorage.getItem("notes") || "[]")
+  // );
+  const [notes, setNotes] = useState<Note[]>([]);
 
   //is still working but replaced with the optional chaining operator bellow
   // const [curNoteId, setCurNoteId] = useState<string>(
   //   (notes[0] && notes[0].id) || ""
   // );
-  const [curNoteId, setCurNoteId] = useState<string>(notes[0]?.id || "");
+  // const [curNoteId, setCurNoteId] = useState<string>(notes[0]?.id || "");
+  const [curNoteId, setCurNoteId] = useState<string | undefined>(notes[0]?.id);
+
+  //removed because i will no longer save data on localStorage
+  // useEffect(() => {
+  //   localStorage.setItem("notes", JSON.stringify(notes));
+  // }, [notes]);
 
   useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
+    //created websocket connection to firebase
+    const unsubscribe = onSnapshot(notesCollection, function (snapshot) {
+      const notesArr = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setNotes(notesArr);
+    });
+    return unsubscribe;
+  }, []);
+
 
   const updateNote = (text: string) => {
     //doest not put updated note at the top of the list
@@ -78,20 +97,30 @@ export default function App(): JSX.Element {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
   };
 
-  const createNewNote = () => {
+  //refactored for firebase
+  // const createNewNote = () => {
+  //   const newNote: Note = {
+  //     id: nanoid(),
+  //     body: "# Type your markdown note title here",
+  //   };
+  //   setNotes((prevNotes) => {
+  //     if (!Array.isArray(prevNotes)) {
+  //       console.error("Notes is not an array:", prevNotes);
+  //       return [newNote];
+  //     }
+  //     return [newNote, ...prevNotes];
+  //   });
+
+  //   setCurNoteId(newNote.id);
+  // };
+  async function createNewNote ()  {
     const newNote: Note = {
-      id: nanoid(),
       body: "# Type your markdown note title here",
     };
-    setNotes((prevNotes) => {
-      if (!Array.isArray(prevNotes)) {
-        console.error("Notes is not an array:", prevNotes);
-        return [newNote];
-      }
-      return [newNote, ...prevNotes];
-    });
-    setCurNoteId(newNote.id);
-  };
+    const newNoteRef = await addDoc(notesCollection, newNote);
+
+    setCurNoteId(newNoteRef.id);
+  }
 
   //replaced for performance with the line bellow
   // const findCurrentNote = (): Note => {
