@@ -3,8 +3,8 @@ import Editor from "./components/Editor";
 import Sidebar from "./components/Sidebar";
 import Split from "react-split";
 import { nanoid } from "nanoid";
-import { addDoc, onSnapshot } from "firebase/firestore";
-import { notesCollection } from "./firebase";
+import { addDoc, onSnapshot, doc, deleteDoc } from "firebase/firestore";
+import { notesCollection, db } from "./firebase";
 
 // React MDE style
 import "react-mde/lib/styles/css/react-mde-all.css";
@@ -25,8 +25,9 @@ export default function App(): JSX.Element {
   // const [curNoteId, setCurNoteId] = useState<string>(
   //   (notes[0] && notes[0].id) || ""
   // );
-  // const [curNoteId, setCurNoteId] = useState<string>(notes[0]?.id || "");
-  const [curNoteId, setCurNoteId] = useState<string | undefined>(notes[0]?.id);
+  // const [curNoteId, setCurNoteId] = useState<string | undefined>(notes[0]?.id);
+  const [curNoteId, setCurNoteId] = useState<string>("");
+  console.log(curNoteId)
 
   //removed because i will no longer save data on localStorage
   // useEffect(() => {
@@ -45,6 +46,11 @@ export default function App(): JSX.Element {
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    if (notes.length > 0) {
+      setCurNoteId(notes[0].id);
+    }
+  }, [notes]);
 
   const updateNote = (text: string) => {
     //doest not put updated note at the top of the list
@@ -89,12 +95,17 @@ export default function App(): JSX.Element {
     });
   };
 
-  const deleteNote = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    noteId: string
-  ) => {
-    event.stopPropagation();
-    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+  //refactored for firebase
+  // const deleteNote = (
+  //   event: React.MouseEvent<HTMLButtonElement>,
+  //   noteId: string
+  // ) => {
+  //   event.stopPropagation();
+  //   setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+  // };
+  const deleteNote = async (noteId: string) => {
+    const docRef = doc(db, "notes", noteId);
+    await deleteDoc(docRef);
   };
 
   //refactored for firebase
@@ -113,7 +124,7 @@ export default function App(): JSX.Element {
 
   //   setCurNoteId(newNote.id);
   // };
-  async function createNewNote ()  {
+  async function createNewNote() {
     const newNote: Note = {
       body: "# Type your markdown note title here",
     };
@@ -143,9 +154,7 @@ export default function App(): JSX.Element {
             deleteNote={deleteNote}
           />
 
-          {curNoteId && notes.length > 0 && (
-            <Editor currentNote={currentNote} updateNote={updateNote} />
-          )}
+          <Editor currentNote={currentNote} updateNote={updateNote} />
         </Split>
       ) : (
         <div className="no-notes">

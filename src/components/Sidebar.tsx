@@ -45,7 +45,7 @@ export default function Sidebar({
             <h4 className="text-snippet">{note.body.split("\n")[0]} </h4>
             <button
               className="delete-btn"
-              onClick={(event) => deleteNote(event, note.id)}
+              onClick={() => deleteNote(note.id)}
             >
               <i className="gg-trash trash-icon"></i>
             </button>
