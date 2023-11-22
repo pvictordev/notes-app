@@ -38,8 +38,8 @@ export default function App(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (notes.length > 0) {
-      setCurNoteId(notes[0].id);
+    if (!curNoteId) {
+      setCurNoteId(notes[0]?.id);
     }
   }, [notes]);
 
