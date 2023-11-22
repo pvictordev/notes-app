@@ -12,6 +12,8 @@ import "react-mde/lib/styles/css/react-mde-all.css";
 interface Note {
   id: string;
   body: string;
+  createdAt: number;
+  updatedAt: number;
 }
 
 export default function App(): JSX.Element {
