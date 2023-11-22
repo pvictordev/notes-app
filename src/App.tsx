@@ -5,31 +5,28 @@ import Split from "react-split";
 import { nanoid } from "nanoid";
 import { addDoc, onSnapshot, doc, deleteDoc, setDoc } from "firebase/firestore";
 import { notesCollection, db } from "./firebase";
-
 // React MDE style
 import "react-mde/lib/styles/css/react-mde-all.css";
+
 interface Note {
-  // id: string;
+  id: string;
   body: string;
   createdAt: number;
   updatedAt: number;
 }
 
 export default function App(): JSX.Element {
-  //removed because i will no longer save data on localStorage
   const [notes, setNotes] = useState<Note[]>([]);
   const [curNoteId, setCurNoteId] = useState<string>("");
 
   const currentNote = notes.find((note) => note.id === curNoteId) || notes[0];
 
-  const sortedNotes = notes.sort((a, b) => b.updatedAt - a.updatedAt);
+  const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
 
-  //removed because i will no longer save data on localStorage
   useEffect(() => {
-    //created websocket connection to firebase
-    const unsubscribe = onSnapshot(notesCollection, function (snapshot) {
-      const notesArr = snapshot.docs.map((doc) => ({
-        ...doc.data(),
+    const unsubscribe = onSnapshot(notesCollection, (snapshot) => {
+      const notesArr: Note[] = snapshot.docs.map((doc) => ({
+        ...(doc.data() as Note),
         id: doc.id,
       }));
       setNotes(notesArr);
@@ -38,46 +35,50 @@ export default function App(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (!curNoteId) {
-      setCurNoteId(notes[0]?.id);
+    if (!curNoteId && notes.length > 0) {
+      setCurNoteId(notes[0].id);
     }
-  }, [notes]);
+  }, [notes, curNoteId]);
 
   //refactored for firebase
   async function createNewNote() {
     const newNote: Note = {
-      body: "# Type your markdown note title here",
+      body: "# Type your markdown note's title here",
       createdAt: Date.now(),
       updatedAt: Date.now(),
+      id: nanoid(),
     };
     const newNoteRef = await addDoc(notesCollection, newNote);
     setCurNoteId(newNoteRef.id);
   }
 
   //refactored for firebase
-  const updateNote = async (text: string) => {
+  async function updateNote(text: string) {
     const docRef = doc(db, "notes", curNoteId);
-    await setDoc(docRef, { body: text, updateAt: Date.now() }, { merge: true });
-  };
+    await setDoc(
+      docRef,
+      { body: text, updatedAt: Date.now() },
+      { merge: true }
+    );
+  }
 
   //refactored for firebase
-  const deleteNote = async (noteId: string) => {
+  async function deleteNote(noteId: string) {
     const docRef = doc(db, "notes", noteId);
     await deleteDoc(docRef);
-  };
+  }
 
   return (
     <main>
       {notes.length > 0 ? (
         <Split sizes={[30, 70]} direction="horizontal" className="split">
           <Sidebar
-            newNote={createNewNote}
+            notes={sortedNotes}
             currentNote={currentNote}
             setCurNoteId={setCurNoteId}
-            notes={sortedNotes}
+            newNote={createNewNote}
             deleteNote={deleteNote}
           />
-
           <Editor currentNote={currentNote} updateNote={updateNote} />
         </Split>
       ) : (
