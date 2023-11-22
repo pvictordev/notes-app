@@ -9,7 +9,7 @@ import { notesCollection, db } from "./firebase";
 // React MDE style
 import "react-mde/lib/styles/css/react-mde-all.css";
 interface Note {
-  id: string;
+  // id: string;
   body: string;
   createdAt: number;
   updatedAt: number;
@@ -18,9 +18,6 @@ interface Note {
 export default function App(): JSX.Element {
   //removed because i will no longer save data on localStorage
   const [notes, setNotes] = useState<Note[]>([]);
-
-  //is still working but replaced with the optional chaining operator bellow
-  // const [curNoteId, setCurNoteId] = useState<string | undefined>(notes[0]?.id);
   const [curNoteId, setCurNoteId] = useState<string>("");
 
   const currentNote = notes.find((note) => note.id === curNoteId) || notes[0];
@@ -72,7 +69,7 @@ export default function App(): JSX.Element {
   return (
     <main>
       {notes.length > 0 ? (
-        <Split sizes={[25, 75]} direction="horizontal" className="split">
+        <Split sizes={[30, 70]} direction="horizontal" className="split">
           <Sidebar
             newNote={createNewNote}
             currentNote={currentNote}
