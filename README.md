@@ -6,7 +6,7 @@
 
 Notes App is a streamlined note-taking platform. It boasts an intuitive interface, modern design, and effortless navigation, ensuring a straightforward note-creation process that prioritizes content organization and accessibility.
 
-**Live Demo**: [Notes App](https://pvictordev.netlify.app/)
+**Live Demo**: [Notes App](https://notes-app-iota-sage.vercel.app/)
 
 ## Technologies Used
 
