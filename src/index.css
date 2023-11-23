@@ -1,11 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  /* color-scheme: light dark; */
-  /* color: rgba(255, 255, 255, 0.87); */
-  /* background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -48,7 +48,7 @@ h1 {
 
 .first-note {
   cursor: pointer;
-  background-color: #4a4e74;
+  background-color: #2f3572;
   border: none;
   color: white;
   border-radius: 3px;
@@ -85,14 +85,33 @@ button {
 
 /****sidebar styling ****/
 
+aside::-webkit-scrollbar {
+  width: 8px;
+}
+
+aside::-webkit-scrollbar-track {
+  background-color: #000;
+  border-radius: 100px;
+}
+
+aside::-webkit-scrollbar-thumb {
+  background-color: #eee;
+  border-radius: 100px;
+  height: 5px;
+}
+
 .sidebar {
   width: 20%;
   height: 100vh;
-  background-color: #202123;
+  background-color: #131924;
   padding: 1em;
   position: relative;
 }
-
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .sidebar__header {
   position: sticky;
   top: 0;
@@ -100,19 +119,53 @@ button {
 }
 .sidebar__new-note {
   cursor: pointer;
-  background-color: #202123;
-  border: 1px solid #53545b;
+  background-color: #131924;
+  border: 1px solid #43465a;
   color: white;
   border-radius: 3px;
   width: 100%;
   text-align: left;
+  transition: 0.1s all ease;
 }
 .sidebar__new-note:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-.sidebar__header > h3 {
-  font-size: 1.75rem;
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+.note-element {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.3rem;
+  border-radius: 5px;
+  transition: 0.1s all ease;
+}
+.note-element:hover {
+  background-color: rgba(38, 41, 70, 0.4);
+}
+
+.selected-note {
+  background-color: #262946;
+  align-items: center;
+}
+
+.selected-note .text-snippet {
+  color: white;
+  font-weight: 700;
+}
+.delete-btn {
+  display: none;
+  background: none;
+  border: none;
+}
+
+.note-element:hover > .delete-btn {
+  display: block;
 }
 
 .title {
@@ -121,11 +174,8 @@ button {
   cursor: pointer;
   display: flex;
   align-items: center;
-  margin-bottom: 0.7em;
   border-radius: 6px;
-}
-.title img {
-  margin-left: 10px;
+  padding-left: 0.5rem;
 }
 
 .title--delete {
@@ -149,44 +199,25 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.selected-note {
-  background-color: #343541;
-}
-
-.selected-note .text-snippet {
-  color: white;
-  font-weight: 700;
-}
 
 .show-more {
   color: #000;
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.8rem;
+}
+.show-more button {
+  color: #000;
   background-color: lightgrey;
-  margin-left: 80px;
+  min-width: 20%;
+  display: flex;
+  align-items: center;
+  column-gap: 0.2rem;
+  font-size: 1rem;
 }
-
-aside::-webkit-scrollbar {
-  width: 8px;
-}
-
-aside::-webkit-scrollbar-track {
-  background-color: #000;
-  border-radius: 100px;
-}
-
-aside::-webkit-scrollbar-thumb {
-  background-color: #eee;
-  border-radius: 100px;
-  height: 5px;
-}
-
-.delete-btn {
-  display: none;
-  background: none;
-  border: none;
-}
-
-.title:hover > .delete-btn {
-  display: block;
+.show-more svg {
+  font-size: 1.4rem;
 }
 
 .trash-icon {

@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import notesIcon from "../assets/notes-icon.png";
+import { IoIosArrowDropdown, IoIosArrowDropup } from "react-icons/io";
 
 interface Note {
   id: string;
@@ -21,7 +22,7 @@ export default function Sidebar({
   setCurNoteId,
   deleteNote,
 }: Props): JSX.Element {
-  const [numberOfItemShown, setNumberOfItemShown] = useState<number>(7);
+  const [numberOfItemShown, setNumberOfItemShown] = useState<number>(5);
 
   const showMore = () => {
     if (numberOfItemShown <= notes.length) {
@@ -30,26 +31,28 @@ export default function Sidebar({
       setNumberOfItemShown(notes.length);
     }
   };
+  
 
   const noteElements = useMemo(
     () =>
       notes.slice(0, numberOfItemShown).map((note) => (
-        <div key={note.id}>
-          <div
-            className={`title ${
-              note.id === currentNote.id ? "selected-note" : ""
-            }`}
-            onClick={() => setCurNoteId(note.id)}
-          >
-            <img style={{width:"20px", height:"20px"}} src={notesIcon} alt="" />
+        <div
+          className={`note-element ${
+            note.id === currentNote.id ? "selected-note" : ""
+          }`}
+          key={note.id}
+        >
+          <div className="title" onClick={() => setCurNoteId(note.id)}>
+            <img
+              style={{ width: "20px", height: "20px" }}
+              src={notesIcon}
+              alt=""
+            />
             <h4 className="text-snippet">{note.body.split("\n")[0]} </h4>
-            <button
-              className="delete-btn"
-              onClick={() => deleteNote(note.id)}
-            >
-              <i className="gg-trash trash-icon"></i>
-            </button>
           </div>
+          <button className="delete-btn" onClick={() => deleteNote(note.id)}>
+            <i className="gg-trash trash-icon"></i>
+          </button>
         </div>
       )),
     [currentNote.id, deleteNote, notes, numberOfItemShown, setCurNoteId]
@@ -57,16 +60,20 @@ export default function Sidebar({
 
   return (
     <aside className="sidebar pane">
-      <div>
+      <div className="sidebar-content">
         <div className="sidebar__header">
           <button className="sidebar__new-note" onClick={newNote}>
             + New Note
           </button>
         </div>
-        {noteElements.length ? noteElements : "loading..."}
-        <button className="show-more" onClick={showMore}>
-          show more
-        </button>
+        <div className="notes-list">
+          {noteElements.length ? noteElements : "loading..."}
+        </div>
+        <div className="show-more">
+          <button onClick={showMore}>
+            show more {numberOfItemShown <= notes.length ? <IoIosArrowDropup /> : <IoIosArrowDropdown />}
+          </button>
+        </div>
       </div>
     </aside>
   );
