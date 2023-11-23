@@ -8,11 +8,16 @@ interface Note {
 }
 
 interface Props {
-  newNote: () => void;
+  // newNote: () => void;
+  // notes: Note[];
+  // currentNote: Note;
+  // setCurNoteId: (id: string) => void;
+  // deleteNote: (event: React.MouseEvent<HTMLButtonElement>, id: string) => void;
   notes: Note[];
   currentNote: Note;
-  setCurNoteId: (id: string) => void;
-  deleteNote: (event: React.MouseEvent<HTMLButtonElement>, id: string) => void;
+  setCurNoteId: React.Dispatch<React.SetStateAction<string>>;
+  newNote: () => void;
+  deleteNote: (noteId: string) => Promise<void>;
 }
 
 export default function Sidebar({
