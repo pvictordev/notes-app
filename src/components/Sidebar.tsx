@@ -31,7 +31,6 @@ export default function Sidebar({
       setNumberOfItemShown(notes.length);
     }
   };
-  
 
   const noteElements = useMemo(
     () =>
@@ -71,7 +70,12 @@ export default function Sidebar({
         </div>
         <div className="show-more">
           <button onClick={showMore}>
-            show more {numberOfItemShown <= notes.length ? <IoIosArrowDropup /> : <IoIosArrowDropdown />}
+            show more{" "}
+            {numberOfItemShown <= notes.length ? (
+              <IoIosArrowDropup />
+            ) : (
+              <IoIosArrowDropdown />
+            )}
           </button>
         </div>
       </div>

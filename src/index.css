@@ -67,7 +67,7 @@ button {
   transition: border-color 0.25s;
 }
 
-/**** gutter styling ****/
+
 .gutter {
   background-color: #eee;
 
@@ -82,8 +82,6 @@ button {
 .gutter.gutter-horizontal:hover {
   cursor: col-resize;
 }
-
-/****sidebar styling ****/
 
 aside::-webkit-scrollbar {
   width: 8px;
