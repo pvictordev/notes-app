@@ -8,11 +8,6 @@ interface Note {
 }
 
 interface Props {
-  // newNote: () => void;
-  // notes: Note[];
-  // currentNote: Note;
-  // setCurNoteId: (id: string) => void;
-  // deleteNote: (event: React.MouseEvent<HTMLButtonElement>, id: string) => void;
   notes: Note[];
   currentNote: Note;
   setCurNoteId: React.Dispatch<React.SetStateAction<string>>;
