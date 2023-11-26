@@ -24,10 +24,6 @@ Markdown Notes App offers the following features:
 
 2. **Sync Across Devices**: Seamless synchronization across multiple devices enables users to access their notes from anywhere, ensuring continuity and accessibility.
 
-3. **Tagging and Categorization**: Organize notes efficiently by adding tags or placing them into different categories, simplifying search and retrieval.
+3. **Search and Filter**: Robust search capabilities let users quickly find specific content within their notes, complemented by filtering options for enhanced navigation.
 
-4. **Customizable Themes**: Personalize the app's interface with various themes and color schemes, catering to different user preferences for aesthetics.
-
-5. **Search and Filter**: Robust search capabilities let users quickly find specific content within their notes, complemented by filtering options for enhanced navigation.
-
-6. **Markdown Preview**: Instant preview of markdown syntax allows users to visualize how their notes will appear while writing, facilitating a smooth editing experience.
+4. **Markdown Preview**: Instant preview of markdown syntax allows users to visualize how their notes will appear while writing, facilitating a smooth editing experience.
