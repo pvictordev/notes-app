@@ -4,7 +4,7 @@
 
 ## Notes App - Markdown Notes App
 
-Notes App is a streamlined note-taking platform. It boasts an intuitive interface, modern design, and effortless navigation, ensuring a straightforward note-creation process that prioritizes content organization and accessibility.
+Notes App is a streamlined markdown note-taking platform. It boasts an intuitive interface, modern design, and effortless navigation, ensuring a straightforward note-creation process that prioritizes content organization and accessibility.
 
 **Live Demo**: [Notes App](https://notes-app-iota-sage.vercel.app/)
 
